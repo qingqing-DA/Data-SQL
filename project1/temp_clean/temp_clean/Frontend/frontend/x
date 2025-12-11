@@ -1,0 +1,1868 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Anna Johnson Cleaning Service</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      :root {
+        --blue: #0f5d7f;
+        --bg: #f7f7f7;
+      }
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background: var(--bg);
+      }
+      header {
+        background: var(--blue);
+        color: #fff;
+        padding: 16px 24px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 1.6rem;
+      }
+      header p {
+        margin: 4px 0 0;
+        font-size: 0.9rem;
+      }
+      nav {
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        gap: 8px;
+        padding: 10px 24px;
+      }
+      nav button {
+        background: transparent;
+        border: 1px solid transparent;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      nav button.active {
+        border-color: var(--blue);
+        background: #e9f4f9;
+      }
+      main {
+        padding: 20px 24px 40px;
+        max-width: 1100px;
+      }
+      section {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 16px;
+        margin-bottom: 18px;
+      }
+      h2 {
+        margin-top: 0;
+      }
+      form {
+        display: grid;
+        gap: 10px;
+        max-width: 480px;
+      }
+      input,
+      select,
+      textarea {
+        padding: 6px 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      textarea {
+        resize: vertical;
+      }
+      button.primary {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        padding: 7px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 6px 8px;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 10px;
+      }
+      .hidden {
+        display: none;
+      }
+      .msg-ok {
+        color: green;
+        margin-top: 8px;
+      }
+      .msg-err {
+        color: red;
+        margin-top: 8px;
+      }
+      .photo-strip {
+        display: flex;
+        gap: 6px;
+        margin-top: 6px;
+      }
+      .photo-strip img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background: #fff;
+      }
+      .request-actions {
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px dashed #ccc;
+        font-size: 0.9rem;
+      }
+      .request-actions h3 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+      }
+      .request-actions h4 {
+        margin: 8px 0 4px;
+        font-size: 0.95rem;
+      }
+      .request-actions label {
+        display: block;
+        margin-bottom: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to Anna Cleaning Service</h1>
+      <p>Anna Johnson Cleaning Service</p>
+    </header>
+
+    <nav>
+      <button id="tab-info">Info</button>
+      <button id="tab-new" class="active">New Client</button>
+      <button id="tab-existing">Existing Client</button>
+      <button id="tab-admin">Admin / Dashboard</button>
+    </nav>
+
+    <main>
+      <!-- INFO TAB -->
+      <div id="page-info" class="hidden">
+        <section>
+          <h2>How it works</h2>
+          <p>1. Client submits a cleaning request with photos.</p>
+          <p>
+            2. Anna reviews it and either rejects it (with a reason) or sends a
+            quote (price + time window + note).
+          </p>
+          <p>
+            3. Client can accept, decline, or send a note to renegotiate.
+          </p>
+          <p>
+            4. Once accepted, the job is scheduled and payment is due after
+            service.
+          </p>
+        </section>
+      </div>
+
+      <!-- NEW CLIENT TAB -->
+      <div id="page-new">
+        <section>
+          <h2>Create Client Account</h2>
+          <form id="form-register">
+            <input name="name" placeholder="Full name" required />
+            <input name="email" type="email" placeholder="Email" required />
+            <input name="phone" placeholder="Phone" />
+            <input name="address" placeholder="Address" />
+            <input
+              name="password"
+              type="password"
+              placeholder="Create password"
+              required
+            />
+            <button class="primary" type="submit">Create account</button>
+          </form>
+          <div id="register-result"></div>
+        </section>
+
+        <section>
+          <h2>Submit Cleaning Request</h2>
+          <p style="font-size: 0.85rem; margin-top: 0">
+            (Create your account above first — we need your client id.)<br />
+            You can upload up to 5 photos.
+          </p>
+          <form id="form-request" enctype="multipart/form-data">
+            <input
+              name="service_address"
+              placeholder="Service address"
+              required
+            />
+            <label>
+              Cleaning type
+              <select name="cleaning_type">
+                <option value="basic">Basic</option>
+                <option value="deep">Deep cleaning</option>
+                <option value="move-out">Move-out</option>
+              </select>
+            </label>
+            <label>
+              Number of rooms
+              <input name="rooms" type="number" min="1" value="1" />
+            </label>
+            <label>
+              Preferred date/time
+              <input name="preferred_datetime" type="datetime-local" />
+            </label>
+            <input name="budget" placeholder="Proposed budget ($)" />
+            <textarea
+              name="notes"
+              rows="3"
+              placeholder="Special instructions (pet-friendly, etc.)"
+            ></textarea>
+            <label>
+              Photos (max 5)
+              <input name="photos" type="file" multiple accept="image/*" />
+            </label>
+            <button class="primary" type="submit">Submit request</button>
+          </form>
+          <div id="request-result"></div>
+        </section>
+      </div>
+
+      <!-- EXISTING CLIENT TAB -->
+      <div id="page-existing" class="hidden">
+        <section>
+          <h2>Client Login</h2>
+          <form id="form-login">
+            <input name="username" placeholder="Username" required />
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              required
+            />
+            <button class="primary" type="submit">Log in</button>
+          </form>
+          <div id="login-result"></div>
+        </section>
+
+        <section>
+          <h2>Your Requests</h2>
+          <div id="client-requests">
+            Log in to view your requests, quotes, and negotiation.
+          </div>
+        </section>
+
+        <!-- Existing client can book another appointment -->
+        <section>
+          <h2>Book Another Cleaning</h2>
+          <p style="font-size: 0.85rem; margin-top: 0">
+            Use this form to request another cleaning using your existing account.
+          </p>
+          <form id="form-existing-request" enctype="multipart/form-data">
+            <input
+              name="service_address"
+              placeholder="Service address"
+              required
+            />
+            <label>
+              Cleaning type
+              <select name="cleaning_type">
+                <option value="basic">Basic</option>
+                <option value="deep">Deep cleaning</option>
+                <option value="move-out">Move-out</option>
+              </select>
+            </label>
+            <label>
+              Number of rooms
+              <input name="rooms" type="number" min="1" value="1" />
+            </label>
+            <label>
+              Preferred date/time
+              <input name="preferred_datetime" type="datetime-local" />
+            </label>
+            <input name="budget" placeholder="Proposed budget ($)" />
+            <textarea
+              name="notes"
+              rows="3"
+              placeholder="Special instructions (pet-friendly, etc.)"
+            ></textarea>
+            <label>
+              Photos (max 5)
+              <input name="photos" type="file" multiple accept="image/*" />
+            </label>
+            <button class="primary" type="submit">Submit new request</button>
+          </form>
+          <div id="existing-request-result"></div>
+        </section>
+
+        <section>
+          <h2>Your Orders & Billing History</h2>
+          <button id="btn-load-orders" class="primary" type="button">
+            Load Orders
+          </button>
+          <div id="client-orders">
+            No orders yet. Once a quote is accepted and confirmed, your orders
+            will appear here.
+          </div>
+        </section>
+      </div>
+
+      <!-- ADMIN TAB -->
+      <div id="page-admin" class="hidden">
+        <!-- admin login -->
+        <section id="admin-login-box">
+          <h2>Admin Login</h2>
+          <form id="form-admin-login">
+            <input
+              name="username"
+              placeholder="Admin username"
+              value="anna_johnson"
+              required
+            />
+            <input
+              name="password"
+              type="password"
+              placeholder="Admin password"
+              required
+            />
+            <button class="primary" type="submit">Log in</button>
+          </form>
+          <p id="admin-login-result"></p>
+        </section>
+
+        <!-- clients -->
+        <section id="admin-clients-box" class="hidden">
+          <h2>Admin – Clients</h2>
+          <div class="row">
+            <button id="btn-load-clients" class="primary" type="button">
+              Load Clients
+            </button>
+            <input
+              id="client-search"
+              placeholder="Search name / username / email / address"
+              style="flex: 1; max-width: 260px;"
+            />
+            <span id="client-count"></span>
+          </div>
+          <table id="tbl-clients">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Card (last 3)</th>
+                <th>Address</th>
+                <th>Total jobs</th>
+                <th>Completed</th>
+                <th>On-time pay</th>
+                <th>Late / overdue</th>
+                <th>Open bills</th>
+                <th>Amount due</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <!-- requests -->
+        <section id="admin-requests-box" class="hidden">
+          <h2>Admin – Service Requests</h2>
+          <button id="btn-load-requests" class="primary" type="button">
+            Load Requests
+          </button>
+          <div id="admin-requests"></div>
+        </section>
+
+        <!-- orders & billing -->
+        <section id="admin-orders-box" class="hidden">
+          <h2>Admin – Orders & Billing</h2>
+          <button id="btn-load-orders-admin" class="primary" type="button">
+            Load Orders
+          </button>
+          <div id="admin-orders"></div>
+        </section>
+
+        <!-- reports -->
+        <section id="admin-reports-box" class="hidden">
+          <h2>Admin – Reports</h2>
+          <div class="row">
+            <select id="report-type">
+              <option value="frequent_clients">
+                Frequent clients (most completed orders)
+              </option>
+              <option value="uncommitted_clients">
+                Uncommitted clients (3+ requests, no completed orders)
+              </option>
+              <option value="accepted_quotes">
+                This month’s accepted quotes
+              </option>
+              <option value="prospective_clients">
+                Prospective clients (no requests)
+              </option>
+              <option value="largest_job">
+                Largest job (most rooms completed)
+              </option>
+              <option value="overdue_bills">
+                Overdue bills (unpaid &gt; 1 week)
+              </option>
+              <option value="bad_clients">
+                Bad clients (currently overdue)
+              </option>
+              <option value="good_clients">
+                Good clients (no overdue, completed orders)
+              </option>
+            </select>
+            <input
+              type="month"
+              id="report-month"
+              style="max-width: 160px;"
+            />
+            <button id="btn-run-report" class="primary" type="button">
+              Run Report
+            </button>
+          </div>
+          <div id="admin-report-results"></div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const API_BASE = "http://127.0.0.1:6767";
+        let ADMIN_TOKEN = null;
+        let currentClientId = null;
+        let loggedInClient = null;
+
+        // helper used in several places
+        function getLoggedInClientId() {
+          // support both client_id and id, depending on backend response
+          if (!loggedInClient) return null;
+          if (loggedInClient.client_id) return loggedInClient.client_id;
+          if (loggedInClient.id) return loggedInClient.id;
+          return null;
+        }
+
+        // ====== PAY / DISPUTE ======
+        async function clientPayOrder(orderId, note) {
+          const clientId = getLoggedInClientId();
+          if (!clientId) {
+            alert("You must be logged in first.");
+            return;
+          }
+
+          if (!confirm("Confirm payment for this order?")) return;
+
+          try {
+            const res = await fetch(
+              API_BASE + `/api/orders/${orderId}/client-action`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "pay", note }),
+              }
+            );
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              alert(data.error || "Could not mark as paid.");
+              return;
+            }
+
+            alert("Thank you – your payment has been recorded.");
+            await loadClientOrders();
+          } catch (err) {
+            console.error("Error paying order:", err);
+            alert("Network error while paying.");
+          }
+        }
+
+        async function clientDisputeOrder(orderId, note) {
+          const clientId = getLoggedInClientId();
+          if (!clientId) {
+            alert("You must be logged in first.");
+            return;
+          }
+
+          if (!note || !note.trim()) {
+            alert("Please enter a note explaining the dispute.");
+            return;
+          }
+
+          try {
+            const res = await fetch(
+              API_BASE + `/api/orders/${orderId}/client-action`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "dispute", note }),
+              }
+            );
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              alert(data.error || "Could not submit dispute.");
+              return;
+            }
+
+            alert("Your dispute has been sent to Anna.");
+            await loadClientOrders();
+          } catch (err) {
+            console.error("Error disputing order:", err);
+            alert("Network error while disputing.");
+          }
+        }
+
+        // ===== Tabs =====
+        const tabs = {
+          new: document.getElementById("page-new"),
+          existing: document.getElementById("page-existing"),
+          admin: document.getElementById("page-admin"),
+          info: document.getElementById("page-info"),
+        };
+
+        function showTab(name) {
+          Object.keys(tabs).forEach((k) => {
+            tabs[k].classList.toggle("hidden", k !== name);
+          });
+          document
+            .querySelectorAll("nav button")
+            .forEach((btn) => btn.classList.remove("active"));
+          document.getElementById("tab-" + name).classList.add("active");
+        }
+
+        document.getElementById("tab-new").onclick = () => showTab("new");
+        document.getElementById("tab-existing").onclick = () =>
+          showTab("existing");
+        document.getElementById("tab-admin").onclick = () => showTab("admin");
+        document.getElementById("tab-info").onclick = () => showTab("info");
+
+        // ===== NEW CLIENT REGISTER =====
+        const formRegister = document.getElementById("form-register");
+        const registerResult = document.getElementById("register-result");
+
+        if (formRegister) {
+          formRegister.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            registerResult.textContent = "";
+
+            const fd = new FormData(formRegister);
+            const body = {
+              name: fd.get("name"),
+              email: fd.get("email"),
+              phone: fd.get("phone"),
+              address: fd.get("address"),
+              password: fd.get("password"),
+            };
+
+            try {
+              const res = await fetch(API_BASE + "/api/auth/register-basic", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+              });
+              const data = await res.json();
+              if (!res.ok || !data.ok) {
+                registerResult.innerHTML =
+                  '<p class="msg-err">' +
+                  (data.error || "Registration failed") +
+                  "</p>";
+                return;
+              }
+              currentClientId = data.client_id;
+              registerResult.innerHTML =
+                '<p class="msg-ok">Account created! Your username is: <strong>' +
+                data.username +
+                "</strong></p>";
+              formRegister.reset();
+            } catch (_err) {
+              registerResult.innerHTML =
+                '<p class="msg-err">Network error.</p>';
+            }
+          });
+        }
+
+        // ===== NEW CLIENT – REQUEST WITH PHOTOS =====
+        const formRequest = document.getElementById("form-request");
+        const requestResult = document.getElementById("request-result");
+
+        if (formRequest) {
+          formRequest.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            requestResult.textContent = "";
+
+            if (!currentClientId) {
+              requestResult.innerHTML =
+                '<p class="msg-err">Create an account first so we know who you are.</p>';
+              return;
+            }
+
+            const fd = new FormData(formRequest);
+            fd.append("client_id", currentClientId);
+
+            try {
+              const res = await fetch(API_BASE + "/api/requests", {
+                method: "POST",
+                body: fd,
+              });
+              const data = await res.json();
+              if (!res.ok || !data.ok) {
+                requestResult.innerHTML =
+                  '<p class="msg-err">' +
+                  (data.error || "Could not submit request") +
+                  "</p>";
+                return;
+              }
+              requestResult.innerHTML =
+                '<p class="msg-ok">Request submitted. Anna will respond with a quote.</p>';
+              formRequest.reset();
+            } catch (_err) {
+              requestResult.innerHTML =
+                '<p class="msg-err">Network error.</p>';
+            }
+          });
+        }
+
+        // ===== EXISTING CLIENT ELEMENTS =====
+        const formLogin = document.getElementById("form-login");
+        const loginResult = document.getElementById("login-result");
+        const clientRequestsDiv =
+          document.getElementById("client-requests");
+        const clientOrdersDiv = document.getElementById("client-orders");
+        const btnLoadOrders = document.getElementById("btn-load-orders");
+
+        const formExistingRequest = document.getElementById(
+          "form-existing-request"
+        );
+        const existingRequestResult = document.getElementById(
+          "existing-request-result"
+        );
+
+        // ===== LOAD CLIENT REQUESTS =====
+        async function loadClientRequests() {
+          if (!loggedInClient) {
+            clientRequestsDiv.textContent =
+              "Log in to view your requests, quotes, and negotiation.";
+            return;
+          }
+
+          const clientId = getLoggedInClientId();
+          if (!clientId) {
+            clientRequestsDiv.textContent =
+              "Could not determine your client id.";
+            return;
+          }
+
+          try {
+            const res = await fetch(
+              API_BASE + "/api/requests?client_id=" + clientId
+            );
+            const data = await res.json();
+
+            if (!Array.isArray(data) || data.length === 0) {
+              clientRequestsDiv.textContent =
+                "No requests yet. Submit one as a new or existing client.";
+              return;
+            }
+
+            clientRequestsDiv.innerHTML = "";
+            data.forEach((r) => {
+              const requestId = r.id;
+              const div = document.createElement("div");
+              div.style.border = "1px solid #ddd";
+              div.style.marginTop = "6px";
+              div.style.padding = "6px 8px";
+
+              // Base info
+              div.innerHTML = `
+                <p><strong>Status:</strong> ${r.status || "—"}</p>
+                <p><strong>Address:</strong> ${r.service_address || "—"}</p>
+                <p><strong>Cleaning type:</strong> ${
+                  r.cleaning_type || "—"
+                }</p>
+                <p><strong>Rooms:</strong> ${r.rooms || "—"}</p>
+                <p><strong>Preferred:</strong> ${
+                  r.preferred_datetime || "—"
+                }</p>
+                <p><strong>Your budget:</strong> ${
+                  r.budget ? "$" + r.budget : "—"
+                }</p>
+                <p><strong>Quote from Anna:</strong> ${
+                  r.quote_price ? "$" + r.quote_price : "—"
+                }</p>
+                <p><strong>Time window:</strong> ${
+                  r.quote_time_window || "—"
+                }</p>
+                <p><strong>Admin note:</strong> ${
+                  r.admin_note || r.notes || "—"
+                }</p>
+              `;
+
+              // Photos
+              if (Array.isArray(r.photos) && r.photos.length) {
+                const imgWrap = document.createElement("div");
+                imgWrap.className = "photo-strip";
+                r.photos.forEach((f) => {
+                  const img = document.createElement("img");
+                  img.src = API_BASE + "/uploads/" + f;
+                  img.alt = "photo";
+                  imgWrap.appendChild(img);
+                });
+                div.appendChild(imgWrap);
+              }
+
+              // Extra actions for QUOTED requests (client can respond)
+              if (r.status === "quoted" && requestId != null) {
+                const actions = document.createElement("div");
+                actions.className = "request-actions";
+                actions.innerHTML = `
+                  <h3>Quote from Anna</h3>
+                  <p>You can accept this quote, decline it, or send a note to renegotiate.</p>
+                  <label>
+                    Optional note to Anna:
+                    <textarea rows="2" style="width:100%;"></textarea>
+                  </label>
+                  <div class="row">
+                    <button type="button" class="primary btn-accept-quote">
+                      Accept quote
+                    </button>
+                    <button type="button" class="btn-decline-quote">
+                      Decline
+                    </button>
+                    <button type="button" class="btn-counter-quote">
+                      Ask for changes
+                    </button>
+                  </div>
+                `;
+
+                const noteBox = actions.querySelector("textarea");
+                const acceptBtn =
+                  actions.querySelector(".btn-accept-quote");
+                const declineBtn =
+                  actions.querySelector(".btn-decline-quote");
+                const counterBtn =
+                  actions.querySelector(".btn-counter-quote");
+
+                acceptBtn.addEventListener("click", () =>
+                  clientQuoteAction(requestId, "accept", noteBox.value)
+                );
+                declineBtn.addEventListener("click", () =>
+                  clientQuoteAction(requestId, "decline", noteBox.value)
+                );
+                counterBtn.addEventListener("click", () =>
+                  clientQuoteAction(requestId, "counter", noteBox.value)
+                );
+
+                div.appendChild(actions);
+              }
+
+              // Extra actions for accepted requests
+              if (r.status === "accepted" && requestId != null) {
+                const actions = document.createElement("div");
+                actions.className = "request-actions";
+                actions.innerHTML = `
+                  <h3>Next steps</h3>
+                  <button class="primary" type="button">
+                    Confirm this as an Order
+                  </button>
+
+                  <h4>Billing info (optional now, due after service)</h4>
+                  <label>
+                    Card number:
+                    <input
+                      type="text"
+                      maxlength="19"
+                      placeholder="1234 5678 9012 3456"
+                    />
+                  </label>
+                  <label>
+                    Card brand:
+                    <select>
+                      <option value="Visa">Visa</option>
+                      <option value="Mastercard">Mastercard</option>
+                      <option value="Amex">Amex</option>
+                      <option value="Discover">Discover</option>
+                    </select>
+                  </label>
+                  <button type="button">
+                    Save billing info
+                  </button>
+                  <p style="font-size:0.8rem; color:#555; margin-top:4px;">
+                    Payment is due after your cleaning is completed. You can
+                    still add your card now to make paying easier later.
+                  </p>
+                `;
+
+                const buttons = actions.getElementsByTagName("button");
+                const inputs = actions.getElementsByTagName("input");
+                const selects = actions.getElementsByTagName("select");
+
+                const orderBtn = buttons[0];
+                const saveBtn = buttons[1];
+                const cardInput = inputs[0];
+                const brandSelect = selects[0];
+
+                orderBtn.addEventListener("click", () =>
+                  createOrderForRequest(requestId)
+                );
+                saveBtn.addEventListener("click", () =>
+                  saveCardForRequest(requestId, cardInput, brandSelect)
+                );
+
+                div.appendChild(actions);
+              }
+
+              clientRequestsDiv.appendChild(div);
+            });
+          } catch (err) {
+            console.error(err);
+            clientRequestsDiv.textContent =
+              "Failed to load your requests.";
+          }
+        }
+
+        // ===== EXISTING CLIENT – BOOK ANOTHER CLEANING =====
+        if (formExistingRequest) {
+          formExistingRequest.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            existingRequestResult.textContent = "";
+
+            const clientId = getLoggedInClientId();
+            if (!loggedInClient || !clientId) {
+              existingRequestResult.innerHTML =
+                '<p class="msg-err">Please log in first.</p>';
+              return;
+            }
+
+            const fd = new FormData(formExistingRequest);
+            fd.append("client_id", clientId);
+
+            try {
+              const res = await fetch(API_BASE + "/api/requests", {
+                method: "POST",
+                body: fd,
+              });
+              const data = await res.json();
+              if (!res.ok || !data.ok) {
+                existingRequestResult.innerHTML =
+                  '<p class="msg-err">' +
+                  (data.error || "Could not submit request") +
+                  "</p>";
+                return;
+              }
+              existingRequestResult.innerHTML =
+                '<p class="msg-ok">New request submitted! Anna will respond with a quote.</p>';
+              formExistingRequest.reset();
+              // refresh list of requests
+              await loadClientRequests();
+            } catch (_err) {
+              existingRequestResult.innerHTML =
+                '<p class="msg-err">Network error.</p>';
+            }
+          });
+        }
+
+        // ===== LOAD CLIENT ORDERS =====
+        async function loadClientOrders() {
+          if (!loggedInClient) {
+            if (clientOrdersDiv) {
+              clientOrdersDiv.textContent = "Log in to view your orders.";
+            }
+            return;
+          }
+
+          const clientId = getLoggedInClientId();
+          if (!clientId) {
+            clientOrdersDiv.textContent =
+              "Could not determine your client id.";
+            return;
+          }
+
+          try {
+            const res = await fetch(
+              API_BASE + "/api/orders?client_id=" + clientId
+            );
+
+            // Read raw text first so we don't crash if it's not valid JSON
+            const raw = await res.text();
+            let data;
+            try {
+              data = raw ? JSON.parse(raw) : null;
+            } catch (parseErr) {
+              console.error("Orders response was not JSON:", raw);
+              clientOrdersDiv.textContent =
+                "Server error loading orders. Check backend logs.";
+              return;
+            }
+
+            if (!res.ok) {
+              console.error("Orders API error:", data);
+              clientOrdersDiv.textContent =
+                "Error loading orders: " +
+                (data && data.error ? data.error : res.statusText);
+              return;
+            }
+
+            if (!Array.isArray(data)) {
+              console.error("Orders API returned non-array:", data);
+              clientOrdersDiv.textContent =
+                "Unexpected response when loading orders: " +
+                JSON.stringify(data);
+              return;
+            }
+
+            if (data.length === 0) {
+              clientOrdersDiv.textContent = "No orders yet.";
+              return;
+            }
+
+            clientOrdersDiv.innerHTML = "";
+            data.forEach((o) => {
+              const box = document.createElement("div");
+              box.style.border = "1px solid #ddd";
+              box.style.marginTop = "6px";
+              box.style.padding = "6px 8px";
+
+              const amountText =
+                o.total_amount != null
+                  ? "$" + Number(o.total_amount).toFixed(2)
+                  : "—";
+
+              const hasCard = o.cc_brand && o.card_last3;
+              const cardText = hasCard
+                ? `${o.cc_brand} ending in *${o.card_last3}`
+                : "None";
+
+              box.innerHTML = `
+        <p><strong>Order #${o.order_id}</strong> – ${
+                o.status || "scheduled"
+              }</p>
+        <p><strong>Address:</strong> ${o.service_address || "—"}</p>
+        <p><strong>Cleaning type:</strong> ${o.cleaning_type || "—"}</p>
+        <p><strong>Total amount:</strong> ${amountText}</p>
+        <p><strong>Payment status:</strong> ${
+          o.payment_status || "not_due"
+        }</p>
+        <p><strong>Card on file:</strong> ${cardText}</p>
+        <p><strong>Created:</strong> ${o.created_at || "—"}</p>
+      `;
+
+              // Show billing actions only for bills you can pay
+              if (o.payment_status === "due" || o.payment_status === "overdue") {
+                const actions = document.createElement("div");
+                actions.className = "request-actions";
+
+                let html = `
+          <h3>Billing actions</h3>
+          <p>Amount due: ${amountText}</p>
+        `;
+
+                // If no card saved yet, show fields to save one first
+                if (!hasCard) {
+                  html += `
+            <h4>Add card to pay this bill</h4>
+            <label>
+              Card number:
+              <input
+                type="text"
+                maxlength="19"
+                placeholder="1234 5678 9012 3456"
+              />
+            </label>
+            <label>
+              Card brand:
+              <select>
+                <option value="Visa">Visa</option>
+                <option value="Mastercard">Mastercard</option>
+                <option value="Amex">Amex</option>
+                <option value="Discover">Discover</option>
+              </select>
+            </label>
+            <button type="button" class="btn-save-card">
+              Save billing info
+            </button>
+          `;
+                }
+
+                html += `
+          <label>
+            Optional note to Anna:
+            <textarea rows="2" style="width:100%;"></textarea>
+          </label>
+          <div class="row">
+            <button type="button" class="primary btn-pay-now">
+              Pay now
+            </button>
+            <button type="button" class="btn-dispute">
+              Dispute bill
+            </button>
+          </div>
+        `;
+
+                actions.innerHTML = html;
+                box.appendChild(actions);
+
+                const noteBox = actions.querySelector("textarea");
+                const payBtn = actions.querySelector(".btn-pay-now");
+                const disputeBtn = actions.querySelector(".btn-dispute");
+                const saveCardBtn = actions.querySelector(".btn-save-card");
+
+                if (payBtn) {
+                  payBtn.addEventListener("click", () =>
+                    clientPayOrder(o.order_id, noteBox.value)
+                  );
+                }
+
+                if (disputeBtn) {
+                  disputeBtn.addEventListener("click", () =>
+                    clientDisputeOrder(o.order_id, noteBox.value)
+                  );
+                }
+
+                if (saveCardBtn) {
+                  const cardInput =
+                    actions.querySelector("input[type='text']");
+                  const brandSelect = actions.querySelector("select");
+                  // requestId is not needed here – we just save card for this client
+                  saveCardBtn.addEventListener("click", () =>
+                    saveCardForRequest(null, cardInput, brandSelect)
+                  );
+                }
+              }
+
+              clientOrdersDiv.appendChild(box);
+            });
+          } catch (err) {
+            console.error("Network / JS error loading orders:", err);
+            clientOrdersDiv.textContent =
+              "Failed to load orders (network or script error). Check console.";
+          }
+        }
+
+        if (btnLoadOrders) {
+          btnLoadOrders.addEventListener("click", loadClientOrders);
+        }
+
+        // ===== CLIENT LOGIN =====
+        if (formLogin) {
+          formLogin.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            loginResult.textContent = "";
+
+            const fd = new FormData(formLogin);
+            const body = {
+              username: fd.get("username"),
+              password: fd.get("password"),
+            };
+
+            try {
+              const res = await fetch(API_BASE + "/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+              });
+              const data = await res.json();
+              if (!res.ok || !data.ok) {
+                loginResult.innerHTML =
+                  '<p class="msg-err">' +
+                  (data.error || "Login failed") +
+                  "</p>";
+                return;
+              }
+              loggedInClient = data.user;
+              loginResult.innerHTML =
+                '<p class="msg-ok">Welcome back, ' +
+                (data.user.name || data.user.username) +
+                "</p>";
+
+              // switch to Existing Client tab and load data
+              showTab("existing");
+              await loadClientRequests();
+              await loadClientOrders();
+            } catch (_err) {
+              loginResult.innerHTML =
+                '<p class="msg-err">Network error.</p>';
+            }
+          });
+        }
+
+        // ===== CLIENT HELPERS – ORDER + CARD =====
+        async function createOrderForRequest(requestId) {
+          const clientId = getLoggedInClientId();
+          if (!clientId) {
+            alert("You must be logged in first.");
+            return;
+          }
+
+          try {
+            const res = await fetch(
+              API_BASE +
+                `/api/clients/${clientId}/requests/${requestId}/create-order`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              alert(data.error || "Could not create order.");
+              return;
+            }
+
+            await loadClientOrders();
+            alert(
+              "Order created! Scroll down to 'Your Orders & Billing History' to see it."
+            );
+          } catch (err) {
+            console.error(err);
+            alert("Network error creating order.");
+          }
+        }
+
+        async function clientQuoteAction(requestId, action, note) {
+          const clientId = getLoggedInClientId && getLoggedInClientId();
+          if (!clientId) {
+            alert("You must be logged in first.");
+            return;
+          }
+
+          try {
+            const res = await fetch(
+              API_BASE + `/api/requests/${requestId}/client-action`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action, note }),
+              }
+            );
+            const data = await res.json();
+
+            if (!res.ok || !data.ok) {
+              alert(data.error || "Could not update this request.");
+              return;
+            }
+
+            if (action === "accept") {
+              alert("Quote accepted. Anna will schedule your cleaning.");
+            } else if (action === "decline") {
+              alert("Quote declined.");
+            } else {
+              alert("Your message has been sent to Anna.");
+            }
+
+            // refresh UI
+            await loadClientRequests();
+            if (typeof loadClientOrders === "function") {
+              await loadClientOrders();
+            }
+          } catch (err) {
+            console.error("Error with quote action:", err);
+            alert("Network error while updating your request.");
+          }
+        }
+
+        async function saveCardForRequest(requestId, numInput, brandSelect) {
+          const clientId = getLoggedInClientId();
+          if (!clientId) {
+            alert("You must be logged in first.");
+            return;
+          }
+
+          const cc_number = numInput.value.trim();
+          const cc_brand = brandSelect.value;
+
+          if (cc_number.length < 4) {
+            alert("Enter a valid card number (we only store last 4).");
+            return;
+          }
+
+          try {
+            const res = await fetch(
+              API_BASE + `/api/clients/${clientId}/card`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ cc_number, cc_brand }),
+              }
+            );
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              alert(data.error || "Could not save billing info.");
+              return;
+            }
+            alert("Billing info saved (only last 4 digits are stored).");
+            numInput.value = "";
+          } catch (err) {
+            console.error(err);
+            alert("Network error saving billing info.");
+          }
+        }
+
+        // ===== ADMIN LOGIN =====
+        const formAdminLogin = document.getElementById("form-admin-login");
+        const adminLoginResult =
+          document.getElementById("admin-login-result");
+        const adminClientsBox =
+          document.getElementById("admin-clients-box");
+        const adminRequestsBox =
+          document.getElementById("admin-requests-box");
+        const adminOrdersBox =
+          document.getElementById("admin-orders-box");
+        const adminReportsBox =
+          document.getElementById("admin-reports-box");
+
+        if (formAdminLogin) {
+          formAdminLogin.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            adminLoginResult.textContent = "";
+
+            const fd = new FormData(formAdminLogin);
+            const body = {
+              username: fd.get("username"),
+              password: fd.get("password"),
+            };
+
+            try {
+              const res = await fetch(API_BASE + "/api/admin/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+              });
+              const data = await res.json();
+              if (!res.ok || !data.ok) {
+                adminLoginResult.textContent =
+                  data.error || "Admin login failed";
+                adminLoginResult.style.color = "red";
+                return;
+              }
+              ADMIN_TOKEN = data.token;
+              adminLoginResult.textContent = "Logged in as " + data.name;
+              adminLoginResult.style.color = "green";
+              adminClientsBox.classList.remove("hidden");
+              adminRequestsBox.classList.remove("hidden");
+              if (adminOrdersBox)
+                adminOrdersBox.classList.remove("hidden");
+              if (adminReportsBox)
+                adminReportsBox.classList.remove("hidden");
+            } catch (_err) {
+              adminLoginResult.textContent = "Network error.";
+              adminLoginResult.style.color = "red";
+            }
+          });
+        }
+
+        // ===== ADMIN – LOAD CLIENTS =====
+        const btnLoadClients = document.getElementById("btn-load-clients");
+        const tblClientsBody =
+          document.querySelector("#tbl-clients tbody");
+        const clientCount = document.getElementById("client-count");
+        const clientSearchInput = document.getElementById("client-search");
+
+        // full list for search/filter
+        let allClients = [];
+
+        if (btnLoadClients) {
+          btnLoadClients.addEventListener("click", loadClients);
+        }
+
+        if (clientSearchInput) {
+          clientSearchInput.addEventListener("input", () => {
+            const q = clientSearchInput.value.toLowerCase().trim();
+            if (!q) {
+              renderClientsTable(allClients);
+              return;
+            }
+            const filtered = allClients.filter((c) => {
+              const text = `${c.name || ""} ${c.username || ""} ${
+                c.email || ""
+              } ${c.address || ""}`.toLowerCase();
+              return text.includes(q);
+            });
+            renderClientsTable(filtered);
+          });
+        }
+
+        async function loadClients() {
+          if (!ADMIN_TOKEN) {
+            alert("Admin not logged in");
+            return;
+          }
+
+          try {
+            const res = await fetch(API_BASE + "/api/clients", {
+              headers: { "x-admin-token": ADMIN_TOKEN },
+            });
+            const data = await res.json();
+
+            if (!res.ok || !Array.isArray(data)) {
+              console.error("Admin clients API error:", data);
+              tblClientsBody.innerHTML =
+                "<tr><td colspan='12'>Error loading clients.</td></tr>";
+              clientCount.textContent = "Total: 0";
+              return;
+            }
+
+            // already sorted most-going to least by backend
+            allClients = data;
+            renderClientsTable(allClients);
+          } catch (err) {
+            console.error("Error loading clients:", err);
+            tblClientsBody.innerHTML =
+              "<tr><td colspan='12'>Network error loading clients.</td></tr>";
+            clientCount.textContent = "Total: 0";
+          }
+        }
+
+        function renderClientsTable(list) {
+          tblClientsBody.innerHTML = "";
+
+          list.forEach((c) => {
+            const totalJobs = c.total_jobs ?? 0;
+            const completed = c.completed_jobs ?? 0;
+            const onTime = c.on_time_payments ?? 0;
+            const late = c.late_payments ?? 0;
+
+            const last3 = c.cc_last4 ? String(c.cc_last4).slice(-3) : "";
+            let cardText = last3 ? `***${last3}` : "—";
+            if (c.cc_brand) {
+              cardText = `${c.cc_brand} ${cardText}`;
+            }
+
+            const openBills = c.open_orders ?? 0;
+            const amountDue =
+              c.open_amount_due != null && c.open_amount_due !== 0
+                ? "$" + c.open_amount_due
+                : "—";
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${c.client_id}</td>
+              <td>${c.username || ""}</td>
+              <td>${c.name || ""}</td>
+              <td>${c.email || ""}</td>
+              <td>${cardText}</td>
+              <td>${c.address || "—"}</td>
+              <td>${totalJobs}</td>
+              <td>${completed}</td>
+              <td>${onTime}</td>
+              <td>${late}</td>
+              <td>${openBills}</td>
+              <td>${amountDue}</td>
+            `;
+            tblClientsBody.appendChild(tr);
+          });
+
+          clientCount.textContent = "Total: " + list.length;
+        }
+
+        // ===== ADMIN – LOAD REQUESTS =====
+        const btnLoadRequests =
+          document.getElementById("btn-load-requests");
+        const adminRequestsDiv =
+          document.getElementById("admin-requests");
+
+        if (btnLoadRequests) {
+          btnLoadRequests.addEventListener("click", loadAdminRequests);
+        }
+
+        async function loadAdminRequests() {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+
+          try {
+            const res = await fetch(API_BASE + "/api/requests", {
+              headers: { "x-admin-token": ADMIN_TOKEN },
+            });
+            const data = await res.json();
+
+            adminRequestsDiv.innerHTML = "";
+
+            (data || []).forEach((r) => {
+              const box = document.createElement("div");
+              box.style.border = "1px solid #ddd";
+              box.style.marginTop = "6px";
+              box.style.padding = "6px 8px";
+
+              box.innerHTML = `
+                <p><strong>#${r.id}</strong> – ${
+                r.cleaning_type || "—"
+              } – ${r.status || "submitted"}</p>
+                <p><strong>Client:</strong> ${r.client_name || ""} (${
+                r.client_email || ""
+              })</p>
+                <p><strong>Address:</strong> ${
+                  r.service_address || "—"
+                }</p>
+                <p><strong>Rooms:</strong> ${r.rooms || "—"}</p>
+                <p><strong>Preferred:</strong> ${
+                  r.preferred_datetime || "—"
+                }</p>
+                <p><strong>Budget:</strong> ${
+                  r.budget ? "$" + r.budget : "—"
+                }</p>
+                <p><strong>Client notes:</strong> ${r.notes || "—"}</p>
+                <p><strong>Current quote:</strong> ${
+                  r.quote_price ? "$" + r.quote_price : "—"
+                }</p>
+                <p><strong>Quote time window:</strong> ${
+                  r.quote_time_window || "—"
+                }</p>
+                <p><strong>Admin note:</strong> ${
+                  r.admin_note || "—"
+                }</p>
+              ";
+
+              if (Array.isArray(r.photos) && r.photos.length) {
+                const imgs = document.createElement("div");
+                imgs.className = "photo-strip";
+                r.photos.forEach((f) => {
+                  const img = document.createElement("img");
+                  img.src = API_BASE + "/uploads/" + f;
+                  img.alt = "photo";
+                  imgs.appendChild(img);
+                });
+                box.appendChild(imgs);
+              }
+
+              const btnRow = document.createElement("div");
+              btnRow.style.marginTop = "6px";
+              btnRow.style.display = "flex";
+              btnRow.style.gap = "6px";
+
+              const quoteBtn = document.createElement("button");
+              quoteBtn.textContent = "Send Quote";
+              quoteBtn.className = "primary";
+              quoteBtn.onclick = () => sendQuote(r.id);
+
+              const acceptBtn = document.createElement("button");
+              acceptBtn.textContent = "Accept";
+              acceptBtn.onclick = () => acceptRequest(r.id);
+
+              const rejectBtn = document.createElement("button");
+              rejectBtn.textContent = "Reject";
+              rejectBtn.onclick = () => rejectRequest(r.id);
+
+              btnRow.appendChild(quoteBtn);
+              btnRow.appendChild(acceptBtn);
+              btnRow.appendChild(rejectBtn);
+
+              box.appendChild(btnRow);
+              adminRequestsDiv.appendChild(box);
+            });
+          } catch (err) {
+            console.error(err);
+            adminRequestsDiv.textContent = "Failed to load requests.";
+          }
+        }
+
+        async function sendQuote(id) {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+          const price = prompt("Quote price ($):");
+          if (price == null || price === "") return;
+          const timeWindow =
+            prompt("Time window (e.g. Tue 10–12):") || "";
+          const note = prompt("Optional note to client:") || "";
+
+          const res = await fetch(
+            API_BASE + `/api/requests/${id}/admin`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-token": ADMIN_TOKEN,
+              },
+              body: JSON.stringify({
+                action: "quote",
+                quote_price: price,
+                quote_time_window: timeWindow,
+                admin_note: note,
+              }),
+            }
+          );
+          const data = await res.json();
+          if (res.ok && data.ok) {
+            alert("Quote sent.");
+            loadAdminRequests();
+          } else {
+            alert(data.error || "Could not send quote");
+          }
+        }
+
+        async function acceptRequest(id) {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+          const note = prompt("Optional note:") || "";
+          const res = await fetch(
+            API_BASE + `/api/requests/${id}/admin`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-token": ADMIN_TOKEN,
+              },
+              body: JSON.stringify({
+                action: "accept",
+                admin_note: note,
+              }),
+            }
+          );
+          const data = await res.json();
+          if (res.ok && data.ok) {
+            alert("Request accepted.");
+            loadAdminRequests();
+          } else {
+            alert(data.error || "Could not accept request");
+          }
+        }
+
+        async function rejectRequest(id) {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+          const note = prompt("Reason for rejecting:") || "";
+          const res = await fetch(
+            API_BASE + `/api/requests/${id}/admin`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "x-admin-token": ADMIN_TOKEN,
+              },
+              body: JSON.stringify({
+                action: "reject",
+                admin_note: note,
+              }),
+            }
+          );
+          const data = await res.json();
+          if (res.ok && data.ok) {
+            alert("Request rejected.");
+            loadAdminRequests();
+          } else {
+            alert(data.error || "Could not reject request");
+          }
+        }
+
+        /* ---------- ADMIN – ORDERS & BILLING ---------- */
+        const btnLoadOrdersAdmin = document.getElementById(
+          "btn-load-orders-admin"
+        );
+        const adminOrdersDiv = document.getElementById("admin-orders");
+
+        if (btnLoadOrdersAdmin) {
+          btnLoadOrdersAdmin.addEventListener("click", loadAdminOrders);
+        }
+
+        async function loadAdminOrders() {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+
+          try {
+            const res = await fetch(API_BASE + "/api/orders", {
+              headers: { "x-admin-token": ADMIN_TOKEN },
+            });
+            const data = await res.json();
+
+            adminOrdersDiv.innerHTML = "";
+
+            if (!Array.isArray(data) || data.length === 0) {
+              adminOrdersDiv.textContent = "No orders yet.";
+              return;
+            }
+
+            const activeOrders = data.filter(
+              (o) => !["paid", "waived"].includes(o.payment_status)
+            );
+            const historyOrders = data.filter((o) =>
+              ["paid", "waived"].includes(o.payment_status)
+            );
+
+            const makeOrderBox = (o) => {
+              const box = document.createElement("div");
+              box.style.border = "1px solid #ddd";
+              box.style.marginTop = "6px";
+              box.style.padding = "6px 8px";
+
+              let dueText = o.payment_due_date || "—";
+              box.innerHTML = `
+                <p><strong>Order #${o.order_id}</strong> – ${
+                o.status || "scheduled"
+              }</p>
+                <p><strong>Client:</strong> ${o.client_name || ""} (${
+                o.client_email || ""
+              })</p>
+                <p><strong>Address:</strong> ${
+                  o.service_address || "—"
+                }</p>
+                <p><strong>Cleaning type:</strong> ${
+                  o.cleaning_type || "—"
+                }</p>
+                <p><strong>Total amount:</strong> ${
+                  o.total_amount != null ? "$" + o.total_amount : "—"
+                }</p>
+                <p><strong>Payment status:</strong> ${
+                  o.payment_status || "not_due"
+                }</p>
+                <p><strong>Payment due date:</strong> ${dueText}</p>
+                <p><strong>Admin note:</strong> ${
+                  o.admin_note || "—"
+                }</p>
+                <p><strong>Client note:</strong> ${
+                  o.client_note || "—"
+                }</p>
+              `;
+
+              const btnRow = document.createElement("div");
+              btnRow.style.marginTop = "6px";
+              btnRow.style.display = "flex";
+              btnRow.style.gap = "6px";
+
+              if (o.status === "scheduled") {
+                const doneBtn = document.createElement("button");
+                doneBtn.className = "primary";
+                doneBtn.textContent =
+                  "Mark service done (generate bill)";
+                doneBtn.onclick = () => markOrderCompleted(o.order_id);
+                btnRow.appendChild(doneBtn);
+              }
+
+              if (o.payment_status === "disputed") {
+                const reviseBtn = document.createElement("button");
+                reviseBtn.textContent = "Revise bill";
+                reviseBtn.onclick = () => reviseOrderBill(o.order_id);
+                btnRow.appendChild(reviseBtn);
+              }
+
+              if (btnRow.children.length) box.appendChild(btnRow);
+              return box;
+            };
+
+            if (activeOrders.length) {
+              const h3 = document.createElement("h3");
+              h3.textContent = "Active orders";
+              adminOrdersDiv.appendChild(h3);
+              activeOrders.forEach((o) =>
+                adminOrdersDiv.appendChild(makeOrderBox(o))
+              );
+            }
+
+            if (historyOrders.length) {
+              const h3 = document.createElement("h3");
+              h3.style.marginTop = "16px";
+              h3.textContent = "Order history";
+              adminOrdersDiv.appendChild(h3);
+              historyOrders.forEach((o) =>
+                adminOrdersDiv.appendChild(makeOrderBox(o))
+              );
+            }
+          } catch (err) {
+            console.error(err);
+            adminOrdersDiv.textContent = "Failed to load orders.";
+          }
+        }
+
+        async function markOrderCompleted(orderId) {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+
+          const amount = prompt("Final amount for this order ($):");
+          if (amount == null || amount === "") return;
+          const note =
+            prompt(
+              "Optional note for client (this appears on their order):"
+            ) || "";
+
+          try {
+            const res = await fetch(
+              API_BASE + `/api/orders/${orderId}/admin-complete`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-admin-token": ADMIN_TOKEN,
+                },
+                body: JSON.stringify({
+                  final_amount: amount,
+                  admin_note: note,
+                }),
+              }
+            );
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              alert(data.error || "Could not mark order completed.");
+              return;
+            }
+
+            alert(
+              "Order marked as completed and bill generated (payment now due)."
+            );
+            loadAdminOrders();
+          } catch (err) {
+            console.error(err);
+            alert("Network error completing order.");
+          }
+        }
+
+        async function reviseOrderBill(orderId) {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+
+          const newAmount = prompt("New amount after adjustment ($):");
+          if (newAmount == null || newAmount === "") return;
+          const note =
+            prompt(
+              "Explanation / note for the client about this revision:"
+            ) || "";
+
+          try {
+            const res = await fetch(
+              API_BASE + `/api/orders/${orderId}/admin-revise`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-admin-token": ADMIN_TOKEN,
+                },
+                body: JSON.stringify({
+                  new_amount: newAmount,
+                  admin_note: note,
+                }),
+              }
+            );
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              alert(data.error || "Could not revise bill.");
+              return;
+            }
+
+            alert("Bill revised. Status set back to 'completed / due'.");
+            loadAdminOrders();
+          } catch (err) {
+            console.error(err);
+            alert("Network error revising bill.");
+          }
+        }
+
+        /* ---------- ADMIN – REPORTS (3–10) ---------- */
+        const reportTypeSelect = document.getElementById("report-type");
+        const reportMonthInput = document.getElementById("report-month");
+        const btnRunReport = document.getElementById("btn-run-report");
+        const adminReportResults =
+          document.getElementById("admin-report-results");
+
+        if (btnRunReport) {
+          btnRunReport.addEventListener("click", runAdminReport);
+        }
+
+        async function runAdminReport() {
+          if (!ADMIN_TOKEN) {
+            alert("Admin login required first.");
+            return;
+          }
+
+          const type = reportTypeSelect.value;
+          const month = reportMonthInput.value || null; // YYYY-MM
+
+          const params = new URLSearchParams({ type });
+          if (month && type === "accepted_quotes") {
+            params.append("month", month);
+          }
+
+          try {
+            const res = await fetch(
+              API_BASE + "/api/admin/report?" + params.toString(),
+              {
+                headers: { "x-admin-token": ADMIN_TOKEN },
+              }
+            );
+            const data = await res.json();
+
+            if (!res.ok || !data.ok) {
+              adminReportResults.textContent =
+                data.error || "Error running report.";
+              return;
+            }
+
+            renderReportTable(data.rows || []);
+          } catch (err) {
+            console.error(err);
+            adminReportResults.textContent =
+              "Network error running report.";
+          }
+        }
+
+        function renderReportTable(rows) {
+          adminReportResults.innerHTML = "";
+
+          if (!rows || rows.length === 0) {
+            adminReportResults.textContent = "No results for this report.";
+            return;
+          }
+
+          const table = document.createElement("table");
+          table.style.marginTop = "10px";
+          table.style.width = "100%";
+          table.style.borderCollapse = "collapse";
+
+          const thead = document.createElement("thead");
+          const headerRow = document.createElement("tr");
+
+          const cols = Object.keys(rows[0]);
+          cols.forEach((col) => {
+            const th = document.createElement("th");
+            th.textContent = col;
+            th.style.border = "1px solid #ccc";
+            th.style.padding = "4px 6px";
+            th.style.textAlign = "left";
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          const tbody = document.createElement("tbody");
+          rows.forEach((row) => {
+            const tr = document.createElement("tr");
+            cols.forEach((col) => {
+              const td = document.createElement("td");
+              let val = row[col];
+              if (val === null || val === undefined || val === "") {
+                val = "—";
+              }
+              td.textContent = val;
+              td.style.border = "1px solid #ccc";
+              td.style.padding = "4px 6px";
+              tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+          });
+          table.appendChild(tbody);
+
+          adminReportResults.appendChild(table);
+        }
+      });
+    </script>
+  </body>
+</html>
