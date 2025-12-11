@@ -1,0 +1,36 @@
+body {
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+ 
+  margin: 0;
+}
+
+
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;  
+  border: none;
+  color: black;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+
+.message {
+  margin-top: 15px;
+  text-align: center;
+}

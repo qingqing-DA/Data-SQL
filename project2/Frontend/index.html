@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>DB Project 1 </title>
+  <style>
+  html, body {
+      height: 100%;
+      margin: 0,120px,0,2px;
+    }
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0,120px,0,2px;
+     
+    }
+     
+  </style>
+</head>
+<body>
+  <h1>Database Project 1</h1>
+  <br><br>
+  
+  <main>
+    <div>
+      <label>Username:</label>
+      <input type="text" id="login-username"><br><br>
+      <label>Password:</label>
+      <input type="text" id="password-input"><br><br>
+      <label>Firstname:</label>
+      <input type="text" id="firstname-input"><br><br>
+      <label>Lastname:</label>
+      <input type="text" id="lastname-input"><br><br>
+      <label>Salary:</label>
+      <input type="text" id="salary-input"><br><br>
+      <label>Age:</label>
+      <input type="text" id="age-input"><br><br>  
+      <button id="add-user-btn">Register</button>
+ </div>
+     <br><br><br>
+     
+      <div>
+        <!-- reuse the existing username/password inputs for login -->
+        <label>Username:</label>
+      <input type="text" id="login-username-input"><br><br>
+      <label>Password:</label>
+      <input type="text" id="login-password-input"><br><br>
+        <button id="login-btn">Login</button>
+      </div>
+      <br><br><br>
+     <div> 
+        <input placeholder="search by username" id="search-username-input">
+        <button id="search-username-btn">Search by Username</button>
+     </div>
+     <br>
+      <div> 
+        <input placeholder="search by userid" id="search-userid-input">
+        <button id="search-userid-btn">Search by UserID</button>
+     </div>
+     <br>
+     <div> 
+        <input placeholder="search by minage" id="search-minage-input">
+        <input placeholder="search by maxage" id="search-maxage-input">
+        <button id="search-age-btn">Search by age</button>
+     </div>
+     <br>
+     <div> 
+        <input placeholder="search by minsalary" id="search-minsalary-input">
+        <input placeholder="search by maxsalary" id="search-maxsalary-input">
+        <button id="search-salary-btn">Search by salary</button>
+     </div>
+     <br>
+      <div> 
+          <input placeholder="search by John" id="search-after-john-input">
+          <button id="search-after-john-btn">Search After John</button> 
+          </div>
+          <br>
+      <div>
+          <input placeholder="search by John" id="search-same-john-input">
+          <button id="search-same-john-btn">Search Same Day as John</button>
+      </div>
+      <br>
+      <div>
+          <input placeholder="search register today" id="search-today-input">
+          <button id="search-registered-today-btn">Search Registered Today</button>
+      </div>
+      <br>      
+      
+      <div>
+        <input placeholder="search never signed in" id="search-never-signed-input">
+  <button id="search-never-signed-btn">Search Never Signed In</button>
+</div> 
+      <br>
+     <table id="table">
+         <thead>
+             <th>userid</th>
+             <th>username</th>
+             <th>Firstname</th>
+             <th>Lastname</th>
+             <th>Salary</th>
+             <th>Age</th>
+             <th>Registerday</th>
+             <th>Signintime</th>
+            
+              
+         </thead>
+         <tbody></tbody>
+     </table>
+
+      <br>
+    
+</main>
+<script src="index.js"></script>
+</body>
+</html>

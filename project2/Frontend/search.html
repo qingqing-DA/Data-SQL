@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h2 {
+      text-align: center;
+    }
+    .search-section {
+      background-color: #fff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+    .search-section input {
+      padding: 5px;
+      margin-right: 5px;
+    }
+    .search-section button {
+      padding: 5px 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>User Search</h2>
+
+  <div class="search-section">
+    <h3>Search by Firstname</h3>
+    <input type="text" id="firstname" placeholder="Enter firstname">
+    <button onclick="searchByFirstname()">Search</button>
+  </div>
+
+  <div class="search-section">
+    <h3>Search by UserID</h3>
+    <input type="number" id="userid" placeholder="Enter UserID">
+    <button onclick="searchByUserid()">Search</button>
+  </div>
+
+  <div class="search-section">
+    <h3>Search by Salary Range</h3>
+    <input type="number" id="minSalary" placeholder="Min">
+    <input type="number" id="maxSalary" placeholder="Max">
+    <button onclick="searchBySalary()">Search</button>
+  </div>
+
+  <div class="search-section">
+    <h3>Search by Age Range</h3>
+    <input type="number" id="minAge" placeholder="Min">
+    <input type="number" id="maxAge" placeholder="Max">
+    <button onclick="searchByAge()">Search</button>
+  </div>
+
+  <div class="search-section">
+    <h3>Other Searches</h3>
+    <button onclick="searchAfterJohn()">Users Registered After John</button>
+    <button onclick="searchSameDayJohn()">Users Registered Same Day as John</button>
+    <button onclick="searchRegisteredToday()">Users Registered Today</button>
+    <button onclick="searchNeverSignedIn()">Users Never Signed In</button>
+  </div>
+
+  <div id="result"></div>
+
+  <script src="search.js"></script>
+</body>
+</html>
