@@ -13,21 +13,11 @@ Uses parameterized SQL queries to prevent SQL injection attacks.
 
 Validates user credentials securely.
 
-Prevents authentication bypass techniques such as:
-
-' OR '1'='1
+Prevents authentication bypass techniques such as:' OR '1'='1
 
 3. Search Users by First and/or Last Name
 
-Supports searching by:
-
-First name only
-
-Last name only
-
-Both first & last name
-
-Case-insensitive matching.
+Supports searching by:First name only and Last name only, and Both first & last name Case-insensitive matching.
 
 4. Search Users by User ID
 
@@ -43,15 +33,11 @@ Retrieve all users whose ages fall between X and Y.
 
 7. Search Users Registered After a Given User
 
-Given a specific userid (e.g., "john"), return all users registered after that user.
-
-Compares registration timestamps.
+Given a specific userid (e.g., "john"), return all users registered after that user. Compares registration timestamps.
 
 8. Search Users Who Never Signed In
 
-Identify users who registered but never logged in.
-
-Useful for analyzing user engagement.
+Identify users who registered but never logged in. Useful for analyzing user engagement.
 
 9. Search Users Registered on the Same Day as Another User
 
@@ -62,3 +48,4 @@ Ignores time-of-day differences.
 10. Users Registered Today
 
 Return all users created on the current date.
+
